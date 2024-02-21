@@ -21,8 +21,8 @@ if( (size(theta,1)~=1) | (size(theta,2)~=1) )
    error('Screws:RPToHomogeneous:Input','Input rotation is not a scalar.\n');
 end
 
-w = xi(4:6);  % Note it is a row vector, not a column vector
-v = xi(1:3);  % Note it is a row vector, not a column vector
+w = xi(4:6);  % Note it is a column vector
+v = xi(1:3);  % Note it is a column vector
 R = eye(3); 
 p = [0,0,0];
 
@@ -31,7 +31,7 @@ if( w == [0,0,0] )
     p = v*theta;
 else
     R = SkewExp(w',theta);
-    p = (eye(3) - R)*(AxisToSkew(w')*v') + w'*((w*v')*theta);
+    p = (eye(3) - R)*(AxisToSkew(w)*v) + w*w'*v*theta;  % AxisToSkew(w') = w_hat
 end
 
 TForm = [ R(1,1), R(1,2), R(1,3), p(1) ;
